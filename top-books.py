@@ -38,6 +38,8 @@ else:
 print("total items " + str(total))
 
 read_page(page, books)
+if count == 0:
+    sys.exit()
 for start in range(count, total, count):
     page = json.loads(urllib.request.urlopen(url+'&start='+str(start)).read(), encoding='utf8')
     read_page(page, books)

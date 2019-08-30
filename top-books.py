@@ -1,7 +1,13 @@
 import json
+import sys
+import urllib.parse
 import urllib.request
 
-q = "python"
+q = sys.argv[1]
+
+items_limit = 0
+if len(sys.argv) >= 3:
+    items_limit = int(sys.argv[2])
 
 api = "https://api.douban.com/v2/book/search"
 apikey = "0df993c66c0c636e29ecbb5344252a4a"
@@ -22,10 +28,13 @@ def read_page(page, books):
                 'alt': book['alt'],
             })
 
-url = api+'?apikey='+apikey+'&q='+q
+url = api+'?apikey='+apikey+'&q='+urllib.parse.quote(q)
 page = json.loads(urllib.request.urlopen(url).read(), encoding='utf8')
 count = page['count']
-total = page['total']
+if items_limit > 0:
+    total = items_limit
+else:
+    total = page['total']
 print("total items " + str(total))
 
 read_page(page, books)
